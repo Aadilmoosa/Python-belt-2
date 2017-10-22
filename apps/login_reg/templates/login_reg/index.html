@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb"
+        crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ"
+        crossorigin="anonymous"></script>
+    <title>Document</title>
+    <style>
+        body {
+            background: rgb(131, 131, 143);
+        }
+
+        .RedError {
+            color: red;
+            font-size: 150%;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <div class="container">
+            <div class="row">
+                <div class="col-6">
+                    <h1>Registration:</h1>
+                    <form action="/register" method="POST">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            {% if messages %}
+                            <ul class="messages">
+                                {% for message in messages %} {% if message.tags == 'first_name error' %}
+                                <li class="RedError">{{ message }}</li>
+                                {% endif %} {% endfor %}
+                            </ul>
+                            {% endif %}
+                            <label for="exampleInputPassword">First Name</label>
+                            <input name="first_name" type="text" class="form-control" id="exampleInputPassword" placeholder="First Name">
+                        </div>
+                        <div class="form-group">
+                            {% if messages %}
+                            <ul class="messages">
+                                {% for message in messages %} {% if message.tags == 'last_name error' %}
+                                <li class="RedError">{{ message }}</li>
+                                {% endif %} {% endfor %}
+                            </ul>
+                            {% endif %}
+                            <label for="exampleInputPassword">Last Name</label>
+                            <input name="last_name" type="text" class="form-control" id="exampleInputPassword" placeholder="Last Name">
+                        </div>
+                        <div class="form-group">
+                            {% if messages %}
+                            <ul class="messages">
+                                {% for message in messages %} {% if message.tags == 'email error' %}
+                                <li class="RedError">{{ message }}</li>
+                                {% endif %} {% endfor %}
+                            </ul>
+                            {% endif %}
+                            <label for="exampleInputEmail">Email address</label>
+                            <input name="email" type="email" class="form-control" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Enter email">
+                            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                        </div>
+                        <div class="form-group">
+                            {% if messages %}
+                            <ul class="messages">
+                                {% for message in messages %} {% if message.tags == 'password error' %}
+                                <li class="RedError">{{ message }}</li>
+                                {% endif %} {% endfor %}
+                            </ul>
+                            {% endif %}
+                            <label for="exampleInputPassword">Password</label>
+                            <input name="password" type="text" class="form-control" id="exampleInputPassword" placeholder="Password">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword">Confirm Password</label>
+                            <input name="cpassword" type="text" class="form-control" id="exampleInputPassword" placeholder="Confirm Password">
+                        </div>
+                        <div class="form-check">
+                            <label class="form-check-label">
+                                <input type="checkbox" class="form-check-input"> I like dogs
+                            </label>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+
+                <div class='col-6'>
+                    <h1>Login:</h1>
+                    <form action="/login" method="POST">
+                        {% csrf_token %}
+                        <div id="container" class="container2">
+                            <div class="form-group">
+                                {% if messages %}
+                                <ul class="messages">
+                                    {% for message in messages %} {% if message.tags == 'login error' %}
+                                    <li class="RedError">{{ message }}</li>
+                                    {% endif %} {% endfor %}
+                                </ul>
+                                {% endif %}
+                                <label for="exampleInputEmail">Email address</label>
+                                <input name="email" type="email" class="form-control" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Enter email">
+                                <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                            </div>
+                            <!-- ================================================================================== -->
+                            <div class="form-group">
+                                <label for="exampleInputPassword">Password</label>
+                                <input name="password" type="text" class="form-control" id="exampleInputPassword" placeholder="Password">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
