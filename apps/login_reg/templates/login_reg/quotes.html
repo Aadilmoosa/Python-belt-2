@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb"
+        crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ"
+        crossorigin="anonymous"></script>
+    <style>
+        body {
+            background: rgb(112, 176, 255);
+            text-align: center;
+        }
+        a{
+            color: white;
+        }
+        .poster{
+            color: black;
+        }
+        #CardTitle{
+            text-decoration: none;
+            color: black;
+        }
+        #Align{
+            margin: auto;
+        }
+        #Button1{
+            margin: 20px;
+        }
+    </style>
+    <title>Quotes</title>
+    {% load static %}
+</head>
+<body>
+    <h1>Welcome, {{user.first_name}}!</h1>
+    <button type="button" class="btn btn-primary btn-lg btn-block"><a href="/logout">logout</a></button>
+
+    <div class="col">
+        <button id="Button1" class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+            Add a Wish!
+        </button>
+        {% if messages %}
+            {% for message in messages%}
+                {% if 'add_item' in message.tags %}
+                    <p>{{message}}</p>
+                {% endif %}
+            {%endfor%}
+        {% endif %}
+        <div class="collapse" id="collapseExample">
+            <div class="card card-body">
+                <form id="Align" action="/create" class="row" method="POST">
+                    {% csrf_token %}
+                    <!-- <textarea name="author" id="QuoteCredit" cols="55" rows="2" placeholder="Who wants this item?"></textarea> -->
+                    <textarea name="content" id="QuoteArea" cols="55" rows="10" placeholder="Enter Item Here"></textarea>
+                    <button type="submit" class="btn btn-primary">Create Wish</button>
+                </form>
+            </div>
+        </div>
+    </div>
+<!-- ========================================================================== -->
+
+    <div class="container">
+        <div class="row">
+            <div id="Quotables" class="col-6">
+                <h2>Other's Wishes:</h2>
+                <div class="card" >
+                    <!-- <img class="card-img-top"> -->
+                    <div class="card-body">
+                        <h4 class="card-title"><a href="" id="CardTitle">Items:</a></h4>
+                        {% for quote in quotable_quotes %}
+                            <div class="one_quote" style="border: 1px black solid;">
+                                <p class="card-text">Added by:<a href="/users/{{quote.poster.id}}" class="poster">{{quote.poster.first_name}}</a></p>
+                                <p>{{quote.content}}</p>
+                                <p>Date Added: {{ quote.created_at }}</p>
+                                <a href="/add_favorite/{{quote.id}}" class="btn btn-primary">Add to Wish List</a>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+<!-- ========================================================================== -->
+<!-- ========================================================================== -->
+            <div id="Favorites" class="col-6">
+                <h2>Your Wish List:</h2>
+                <div class="card" >
+                    <div class="card-body">
+                        <h4 class="card-title"><a href="" id="CardTitle">Items:</a></h4>
+                        {% for favorite in favorites %}
+                                <div class="one_quote" style="border: 1px black solid;">
+                                  <p>Added by:<a href="/users/{{favorite.poster.id}}" class="poster">{{favorite.poster.first_name}}</a></p>
+                                  <p style="border: 1px black solid; ">Item:<a href="/show_quote/{{favorite.id}}" class="poster">{{favorite.content}}</a></p>
+                                  <p>Date Added: {{ favorite.created_at }}</p>
+                                    <a href="/delete_favorite/{{favorite.id}}" class="btn btn-primary">Remove from Wish List</a>
+                              </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+            </div>
+<!-- ========================================================================== -->
+<!-- ========================================================================== -->
+        </div>
+    </div>
+</body>
+</html>

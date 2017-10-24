@@ -35,6 +35,8 @@ class UserManager (models.Manager):
         elif postData['password'] != postData['cpassword']:
             errors['password'] = 'Passwords must match'
 
+        
+
         if not errors:
             user_list = self.filter(email = postData['email'])
             if user_list:
@@ -50,14 +52,14 @@ class UserManager (models.Manager):
         return self.create(email = email, password = password, first_name = Fname, last_name = Lname)
 
 
-    def login(self,post):#this is getting all the stuff from your form for checking
-        email = post['email'].lower() #this gets the login email and stores it into a variable
-        users = self.filter(email = email) #this queries the database and returns a list of emails that match the email that was passed in    
-        if users: #if that list has users, take the first one (because we expect the lsit to only have one dude)
-            user = users[0] #set the first dude to a user variable
-            if bcrypt.checkpw(post['password'].encode(), user.password.encode()): #if you found an email address, then do a check using bcrypty
-                return user #you want to return the user to the function so that they can parse their stuff and display on the template
-        return False #else, you messed up
+    def login(self,post):
+        email = post['email'].lower()
+        users = self.filter(email = email)
+        if users:
+            user = users[0]
+            if bcrypt.checkpw(post['password'].encode(), user.password.encode()):
+                return user
+        return False
 
 class User(models.Model):
     first_name = models.CharField(max_length = 255)
@@ -69,7 +71,33 @@ class User(models.Model):
 
     def  __str__(self):
         return "First name: {}/ Last name: {}/ Email: {}/".format(self.first_name, self.last_name, self.email)
-        
 
+class QuoteManager(models.Manager):
+    def validateQuote(self, postData):
+        content = postData['content']
+        # author = postData['author']
 
+        errors = []
 
+        if len(postData['content']) < 3:
+            errors.append('Item name must contain at least 3 characters')
+        # if len(postData['author']) < 1:
+        #     errors.append('Must enter Author name')
+        return errors
+
+    def newQuote(self, post):
+        content = post['content']
+        # author = post['author']
+        created_at = post['created_at']
+        return self.create(content = content, author = passauthorword, created_at = created)
+
+class Quote(models.Model):
+    content = models.CharField(max_length = 255)
+    author = models.CharField(max_length = 255)
+    poster = models.ForeignKey(User, related_name = 'authored_quotes')
+    created_at = models.DateTimeField(auto_now_add = True)
+    updated_at = models.DateTimeField(auto_now = True)
+    favorites = models.ManyToManyField("User", related_name="favorites", default=None)    
+    objects = QuoteManager()
+    def __str__(self):
+        return 'content:{}, author:{}, poster:{}'.format(self.content, self.author, self.poster)
